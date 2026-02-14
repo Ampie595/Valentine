@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Valentine 💖</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", cursive;
+  overflow: hidden;
+  height: 100vh;
+  background: linear-gradient(270deg, #ff4e9b, #ff7ac6, #ffb3e6, #ff4e9b);
+  background-size: 800% 800%;
+  animation: gradientMove 12s ease infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Envelope */
+.envelope {
+  width: 260px;
+  height: 180px;
+  background: white;
+  position: relative;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #ff4e9b;
+  transition: transform 0.5s ease;
+}
+
+.envelope:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-left: 130px solid transparent;
+  border-right: 130px solid transparent;
+  border-top: 90px solid #ffe6f3;
+  transform-origin: top;
+  transition: transform 0.8s ease;
+}
+
+.envelope.open:before {
+  transform: rotateX(180deg);
+}
+
+.envelope.open {
+  transform: scale(0);
+}
+
+/* Card */
+.card {
+  position: absolute;
+  background: rgba(255,255,255,0.15);
+  padding: 40px;
+  border-radius: 25px;
+  backdrop-filter: blur(12px);
+  text-align: center;
+  color: white;
+  box-shadow: 0 0 40px rgba(255,255,255,0.5);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: 1s ease;
+  max-width: 420px;
+}
+
+.card.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.text {
+  font-size: 1.5rem;
+  line-height: 1.6;
+}
+
+.signature {
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 30px;
+  background: white;
+  color: #ff4e9b;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+
+/* Floating hearts */
+.heart {
+  position: absolute;
+  color: white;
+  font-size: 20px;
+  animation: floatUp 8s linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+}
+
+/* Sparkles */
+.sparkle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+  pointer-events: none;
+  animation: sparkleMove 1s ease-out forwards;
+}
+
+@keyframes sparkleMove {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(0);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="envelope" id="envelope" onclick="openEnvelope()">
+  Open Me 💌
+</div>
+
+<div class="card" id="card">
+  <div class="text">
+    Roses are red,<br>
+    This answer is true —<br>
+    Valentine’s with you?<br>
+    <strong>Yes. Absolutely you.</strong>
+  </div>
+
+  <div class="signature">
+    Happy Valentines Day, my love! 💖
+  </div>
+
+  <button onclick="playMusic()">Play Music 🎵</button>
+</div>
+
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_7c4bde5b7f.mp3" type="audio/mp3">
+</audio>
+
+<script>
+function openEnvelope() {
+  const env = document.getElementById("envelope");
+  env.classList.add("open");
+
+  sparkleBurst(window.innerWidth/2, window.innerHeight/2);
+
+  setTimeout(() => {
+    document.getElementById("card").classList.add("show");
+  }, 500);
+}
+
+function playMusic() {
+  document.getElementById("music").play();
+}
+
+/* Floating hearts */
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML = "❤";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+  heart.style.animationDuration = (Math.random() * 4 + 4) + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 8000);
+}
+setInterval(createHeart, 400);
+
+/* Sparkle burst */
+function sparkleBurst(x, y) {
+  for (let i = 0; i < 40; i++) {
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.style.left = x + "px";
+    s.style.top = y + "px";
+
+    const angle = Math.random() * 2 * Math.PI;
+    const distance = Math.random() * 120 + 40;
+
+    s.style.setProperty("--x", Math.cos(angle) * distance + "px");
+    s.style.setProperty("--y", Math.sin(angle) * distance + "px");
+
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1000);
+  }
+}
+</script>
+
+</body>
+</html>
